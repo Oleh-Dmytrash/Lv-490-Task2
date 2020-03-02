@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <type_traits>
+#include <stdexcept>
 
 class AnyType
 {
@@ -30,7 +31,7 @@ public:
 	std::string Type()const { return type; }
 	void Swap(AnyType& other)
 	{
-		std::swap(this->data, other.data);
+		std::swap(*this, other);
 	}
 
 	size_t GetTypeSize() const
@@ -61,20 +62,18 @@ public:
 	{
 		float return_value = 0;
 		if (type == "float" ||
-			type == "int"   ||
-			type == "char"  ||
-			type == "bool") return_value = *(float*)data.get();
-		return return_value;
+			type == "int" ||
+			type == "char" ||
+			type == "bool")
+		{
+			return_value = *(float*)data.get();
+			return return_value;
+		}
 		throw std::runtime_error("Can not convert to float");
 	}
 	double ToDouble()
 	{
-		double return_value = 0;
-		if (type == "double" ||
-			type == "float"  ||
-			type == "int"    ||
-			type == "char"   ||
-			type == "bool") return_value  = *(double*)data.get();
+		double return_value  = *(double*)data.get();
 		return return_value;
 	}
 
