@@ -2,9 +2,8 @@
 
 int main()
 {
-	AnyType a = 1LL;
-	a.ToDouble();
-	std::cout << a.ToDouble();
+	AnyType a = 'a';
+	cout << a.ToDouble() << endl;
 	return 0;
 }
 

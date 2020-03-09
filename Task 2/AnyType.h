@@ -1,6 +1,7 @@
 #include <iostream>
 #include<string>
 using namespace std;
+
 class AnyType
 {
 public:
@@ -15,7 +16,7 @@ public:
 	~AnyType() {}
 
 	template <typename T>
-	AnyType operator=(T temp)
+	AnyType operator=(T temp)//assign opretator
 	{
 		static_assert(is_fundamental<T>::value, "Only fundamental types");
 
@@ -51,6 +52,7 @@ public:
 		if (type_name == "char"||type_name=="bool") return *(char*)value.get();
 		throw std::runtime_error("Can not convert to char");
 	}
+	
 
 	long long ToLongLong()
 	{
@@ -62,16 +64,25 @@ public:
 
 	double ToDouble()
 	{
-		double res = 0.0;
-		if (type_name == "double" || type_name == "__int64"
-			|| type_name == "char" || type_name == "bool")
+		if (type_name == "double" )
+			return *(double*)value.get();
+		if (type_name == "__int64")
 		{
-			res= *(double*)value.get();
-			return res;
+			long long* temp = (long long*)value.get();
+			return *temp;
 		}
+		if (type_name == "char")
+		{
+			char* temp = (char*)value.get();
+			return *temp;
+		}
+		if (type_name == "bool")
+		{
+			bool* temp = (bool*)value.get();
+			return *temp;
+		}			
 		throw std::runtime_error("Can not convert to double");
 	}
-
 private:
 	string type_name;
 	shared_ptr<void> value;
